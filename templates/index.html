@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="bar">
+  <form method="get">
+    <input name="q" value="{{ q }}" placeholder="Search name, email, department">
+    <button class="btn" type="submit">Search</button>
+  </form>
+  <a class="btn" href="{{ url_for('add') }}">+ Add employee</a>
+</div>
+<table>
+  <thead>
+    <tr><th>Name</th><th>Email</th><th>Department</th><th>Position</th><th>Salary</th><th>Hire date</th><th>Actions</th></tr>
+  </thead>
+  <tbody>
+  {% for e in employees %}
+    <tr>
+      <td>{{ e.name }}</td>
+      <td>{{ e.email }}</td>
+      <td>{{ e.department or '' }}</td>
+      <td>{{ e.position or '' }}</td>
+      <td>{{ e.salary if e.salary is not none else '' }}</td>
+      <td>{{ e.hire_date or '' }}</td>
+      <td>
+        <a class="btn gray" href="{{ url_for('edit', emp_id=e.id) }}">Edit</a>
+        <form class="inline" method="post" action="{{ url_for('delete', emp_id=e.id) }}" onsubmit="return confirm('Delete this employee?');">
+          <button class="btn danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="7">No employees found.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
